@@ -37,11 +37,8 @@
                     $msgType = $postObj->MsgType;//获取消息类型
                     $keyword = trim($postObj->Content);//将用户微信发来的文本内容去掉空格后赋予变量keyword  
                     $time = time();//将系统时间赋予变量time  
-                    //构建XML格式的文本赋予变量textTpl，注意XML格式为微信内容固定格式，详见文档 
-                    $longitude = $postObj->Location_Y;
-                    $latitude = $postObj->Location_X; 
-                    
-                     $textTpl = "<xml>  
+                    //构建XML格式的文本赋予变量textTpl，注意XML格式为微信内容固定格式，详见文档  
+                    $textTpl = "<xml>  
                                 <ToUserName><![CDATA[%s]]></ToUserName>  
                                 <FromUserName><![CDATA[%s]]></FromUserName>  
                                 <CreateTime>%s</CreateTime>  
@@ -117,14 +114,6 @@
                        		$contentStr = "your message is image|中文测试";//我们进行文本输入的内容，变量名为contentStr，如果你要更改回复信息，就在这儿  
                         	$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);//将XML格式中的变量分别赋值。注意sprintf函数  
                         	echo $resultStr;//输出回复信息，即发送微信  
-                    else if($msgType == 'location'){
-                            $msgType = "text";//回复文本信息类型为text型，变量类型为msgType
-                            $url = "http://api.map.baidu.com/geocoder/v2/?location={$latitude},{$longitude}&output=json&pois=1&ak=tlO2LzUcEG08dRqzcvddkd69Y4lSLoLC";
-                            $str = file_get_contents($url);
-                            $str = json_decode($str); 
-                            $contentStr = "your message is location:{$str->result->formatted_address}|中文测试";//我们进行文本输入的内容，变量名为contentStr，如果你要更改回复信息，就在这儿  
-                            $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);//将XML格式中的变量分别赋值。注意sprintf函数  
-                            echo $resultStr;//输出回复信息，即发送微信  
                     }else{  
                         echo "Input something...";//不发送到微信端，只是测试使用  
                     }  
